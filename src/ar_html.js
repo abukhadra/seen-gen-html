@@ -1,4 +1,4 @@
-import JSGen from '../../seen-gen-js/src/javascript.js'
+import JSGen from 'seen-gen-js/src/javascript.js'
 
 import {
     maybe_hyphenated,
@@ -12,7 +12,7 @@ import {
     is_list,
     to_str,
     panic,
-} from '../../seen-compiler/src/util.js'
+} from 'seen-compiler/src/util.js'
 
 const HTML_tag_en = {
     "صفحة_الشبكة"   : "html",          
