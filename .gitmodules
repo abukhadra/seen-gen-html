@@ -1,0 +1,3 @@
+[submodule "seen-compiler"]
+	path = seen-compiler
+	url = https://github.com/abukhadra/seen-compiler
