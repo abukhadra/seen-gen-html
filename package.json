@@ -21,9 +21,9 @@
         "url": "git+https://github.com/abukhadra/seen-gen-html.git"
     },
     "scripts": {
+        "build" : "npm i && vite build",
+        "postbuild" : "npm run minify",        
         "preinstall" : "npm run clean",
-        "prepare": "vite build",
-        "postprepare" : "npm run minify",
         "minify": "esbuild gen-html.js --minify --outfile=gen-html.js --allow-overwrite",
         "clean": "rm -rf ./gen-html.js && rm -rf ./node_modules"
     },
