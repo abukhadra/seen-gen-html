@@ -18,7 +18,13 @@ export default defineConfig({
             name: 'SeenGenHTML',
             fileName: () => 'gen-html.js',
         },          
-        rollupOptions: {},
+        rollupOptions: {
+            external: [
+                "seen-gen-js",
+                "seen-compiler"
+            ]
+        }
+        ,
       },    
 	plugins: [
     vue(), 
