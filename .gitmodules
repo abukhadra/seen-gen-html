@@ -7,3 +7,9 @@
 [submodule "src/seen-gen-js"]
 	path = src/seen-gen-js
 	url = https://github.com/abukhadra/seen-gen-js
+[submodule "lib/seen-gen-js"]
+	path = lib/seen-gen-js
+	url = https://github.com/abukhadra/seen-gen-js
+[submodule "lib/seen-compiler"]
+	path = lib/seen-compiler
+	url = https://github.com/abukhadra/seen-compiler
