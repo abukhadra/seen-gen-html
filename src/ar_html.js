@@ -12,7 +12,7 @@ import {
     is_list,
     to_str,
     panic,
-} from 'seen-compiler/scompiler.js'
+} from '../node_modules/seen-compiler/scompiler.js'
 
 const HTML_tag_en = {
     "صفحة_الشبكة"   : "html",          
