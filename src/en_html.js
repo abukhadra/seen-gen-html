@@ -6,7 +6,7 @@ import  {
     is_list,
     to_str,
     panic,
-} from 'seen-compiler/src/util.js'
+} from 'seen-compiler/scompiler.js'
 
 export default function write_html(el, page) {
     const stack = []
