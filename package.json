@@ -23,8 +23,10 @@
     "scripts": {
         "build" : "npm i && vite build",
         "postbuild" : "npm run minify",        
+        "preinstall" : "npm run clean-out",
         "minify": "esbuild gen-html.js --minify --outfile=gen-html.js --allow-overwrite",
-        "clean": "rm -rf ./gen-html.js && rm -rf ./node_modules"
+        "clean": "npm run clean-out && rm -rf ./node_modules",
+        "clean-out" : "rm -rf ./gen-html.js"
     },
     "dependencies": {
         "seen-compiler" : "github:abukhadra/seen-compiler",
