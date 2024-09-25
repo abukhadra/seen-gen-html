@@ -76,8 +76,7 @@ function maybe_hyphenated(id) {
         return id.replaceAll('_','-')
     } else {
         return id
-    }
-    
+    }  
 }
 
 export { 
