@@ -23,9 +23,9 @@ class HtmlWriter {
                 let children = el.v[2] || []
                 if(tag === 'br') { return page += '<br>' }
                 switch(tag) {
-                    case 'select': page = write_css(attrs, page) + '} '; break
-                    case 'font_face': page = write_css_fontface(attrs, page); break
-                    case 'keyframes': page = write_css_keyframes(attrs, children, page) ; break
+                    case 'select': page = this.write_css(attrs, page) + '} '; break
+                    case 'font_face': page = this.write_css_fontface(attrs, page); break
+                    case 'keyframes': page = this.write_css_keyframes(attrs, children, page) ; break
                     default: 
                         stack.push(tag)
                         page += `<${tag}`
@@ -72,11 +72,11 @@ class HtmlWriter {
             const k = maybe_hyphenated(attr.v[0].v[1])
             const v = attr.v[1]
             if(k === 'element') {
-                page = write_css_selector(v, page)
+                page = this.write_css_selector(v, page)
                 page += ' {'
             } else {
                 page += `${k} : `
-                page = write_css_attr_value(v, page)
+                page = this.write_css_attr_value(v, page)
                 page += `; `
             }
         })
@@ -106,17 +106,17 @@ class HtmlWriter {
                 break
             case 'prefix': 
                     page += v.v.op.v
-                    page = write_css_attr_value(v.v.opr, page) 
+                    page = this.write_css_attr_value(v.v.opr, page) 
                     break
             case 'postfix': 
-                page = write_css_attr_value(v.v.opr, page) 
+                page = this.write_css_attr_value(v.v.opr, page) 
                 page += v.v.op.v                        
                 break
             case 'str': page += v.v.v[1]; break;
             case 'ref': page += maybe_hyphenated(v.v.v[1]); break;
             case 'tuple':   // FIXME: this depends on order, some things require order in css and others do not
                 v.v.forEach(el =>  {
-                    page = write_css_attr_value(el, page + ' ') 
+                    page = this.write_css_attr_value(el, page + ' ') 
                 }) 
                 break; 
             case 'call': 
@@ -124,7 +124,7 @@ class HtmlWriter {
                 const args = v.v[1]                
                 page += ` ${ref}(`
                 args.forEach(arg => {
-                    page = write_css_attr_value(arg, page)
+                    page = this.write_css_attr_value(arg, page)
                 })
                 page += `)`
                 break
@@ -157,7 +157,7 @@ class HtmlWriter {
                 case 'at' : 
                     const percentage = v[0]
                     const attrs = v[1].v || [] 
-                    page = write_css_attr_value(percentage, page)
+                    page = this.write_css_attr_value(percentage, page)
                     page += ' {' 
                     attrs.forEach(attr => { 
                         if(attr.id === 'named_tuple') {
@@ -165,14 +165,14 @@ class HtmlWriter {
                                 const _k = maybe_hyphenated(el[0].v[1])
                                 const _v = el[1]
                                 page += ` ${_k} : `                            
-                                page = write_css_attr_value(_v, page) 
+                                page = this.write_css_attr_value(_v, page) 
                                 page += `; `    
                             })
                         } else {
                             const _k = maybe_hyphenated(attr[0].v[1])
                             const _v = attr[1]                            
                             page += ` ${_k} : `                            
-                            page = write_css_attr_value(_v, page) 
+                            page = this.write_css_attr_value(_v, page) 
                             page += `; `
                         }
                     } ) 
