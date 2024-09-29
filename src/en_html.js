@@ -9,7 +9,7 @@ import  {
 class HtmlWriter {
     jsGen
 
-    init(jsGen) {
+    constructor(jsGen) {
         jsGen.init()
         this.jsGen = jsGen
         return this

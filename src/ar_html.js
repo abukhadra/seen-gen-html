@@ -192,10 +192,9 @@ const CSS_str_en = (id) => { // FIXME: workround
 class ArHtmlWriter {
     jsGen 
 
-    init(jsGen) { 
+    constructor(jsGen) { 
         jsGen.init()
         this.jsGen = jsGen 
-        console.log(this.jsGen)
         return this
     }
 
