@@ -1,3 +1,4 @@
+import { HYPHENATED } from './constants.js'
 export {HtmlWriter} from './en_html.js'
 export { 
     ArHtmlWriter,
