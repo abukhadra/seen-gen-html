@@ -192,7 +192,10 @@ const CSS_str_en = (id) => { // FIXME: workround
 class ArHtmlWriter {
     jsGen 
 
-    constructor() { this.jsGen = jsGen }
+    constructor() { 
+        this.jsGen = jsGen 
+        this.jsGen.init()
+    }
     write_ar_html(el, page) {
         const stack = []
         switch (el.id) {
@@ -326,9 +329,8 @@ class ArHtmlWriter {
                 page += `)`
                 break
             case 'bin': 
-                jsGen.init()
-                jsGen.write_expr(v)
-                const code = jsGen.get_code()
+                this.jsGen.write_expr(v)
+                const code = this.jsGen.get_code()
                 page += '${' + code + '}'.trim() 
                 break
             default: panic(`not supported: html generations:  ${to_str(v)}`)

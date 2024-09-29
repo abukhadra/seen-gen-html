@@ -9,7 +9,10 @@ import  {
 class HtmlWriter {
     jsGen
 
-    constructor(jsGen) { this.jsGen = jsGen }
+    constructor(jsGen) { 
+        this.jsGen = jsGen 
+        this.jsGen.init()
+    }
     write_html(el, page) {
         const stack = []
         switch(el.id) {
@@ -125,12 +128,8 @@ class HtmlWriter {
                 page += `)`
                 break
                 case 'bin': 
-                    const gen = new JSGen()
-                    // gen.init([v])
-                    gen.init()
-                    gen.write_expr(v)
-                    const code = gen.get_code()
-                    pprint(code)
+                    this.jsGen.write_expr(v)
+                    const code = this.jsGen.get_code()
                     page += '${' + code + '}'.trim() 
                     break
             default: panic(`not supported: html generations:  ${to_str(v)}` )
