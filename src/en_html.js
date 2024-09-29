@@ -9,6 +9,8 @@ import  {
 class HtmlWriter {
     jsGen
 
+    test() { console.log('println(testing HTMLWRITER)')}
+
     init(jsGen) {
         jsGen.init()
         this.jsGen = jsGen
