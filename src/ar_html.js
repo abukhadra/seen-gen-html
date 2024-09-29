@@ -12,7 +12,7 @@ import {
     is_list,
     to_str,
     panic,
-} from 'seen-compiler/src/main.js'
+}  from '../lib/sutils.js'
 
 const HTML_tag_en = {
     "صفحة_الشبكة"   : "html",          

@@ -28,10 +28,6 @@
         "clean": "npm run clean-out && rm -rf ./node_modules  && rm -rf ./package-lock.json",
         "clean-out" : "rm -rf ./dist"
     },
-    "dependencies": {
-        "seen-compiler" : "github:abukhadra/seen-compiler",
-        "seen-gen-js" : "github:abukhadra/seen-gen-js"
-      },    
     "author": "Mustafa Abukhadra",
     "license": "MIT",
     "homepage": "https://seenlang.org",
