@@ -9,8 +9,6 @@ import  {
 class HtmlWriter {
     jsGen
 
-    test() { console.log('println(testing HTMLWRITER)')}
-
     init(jsGen) {
         jsGen.init()
         this.jsGen = jsGen
@@ -58,7 +56,7 @@ class HtmlWriter {
                             }
                         })
                         page += '>'
-                        children.forEach( c => { page = write_html(c , page)  })
+                        children.forEach( c => { page = this.write_html(c , page)  })
                         stack.pop()
                         page += `</${tag}>`
                 }

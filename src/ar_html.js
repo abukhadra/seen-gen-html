@@ -242,7 +242,7 @@ class ArHtmlWriter {
                             }
                         })
                         page += '>'
-                        children.forEach(c => { page = write_ar_html(c, page) })
+                        children.forEach(c => { page = this.write_ar_html(c, page) })
                         stack.pop()
                         page += `</${tag}>`
                 }
