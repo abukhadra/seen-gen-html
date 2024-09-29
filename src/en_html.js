@@ -9,9 +9,9 @@ import  {
 class HtmlWriter {
     jsGen
 
-    constructor(jsGen) { 
-        this.jsGen = jsGen 
-        this.jsGen.init()
+    init(jsGen) {
+        jsGen.init()
+        this.jsGen = jsGen
         return this
     }
     write_html(el, page) {
