@@ -1,8 +1,8 @@
-import {
-    maybe_hyphenated,
+import { maybe_hyphenated } from './html.js'
+import {    
     BOOL_ATTRS,
     ELEMENTS_WITH_DIR,
-} from './html.js'
+} from './constants.js'
 
 import {
     pprint,
@@ -42,7 +42,7 @@ const CSS_rule_en = (id) => { // FIXME: workround
     }
 }
 
- const CSS_pseudo_en =  {    // FIXME: workaround
+const CSS_pseudo_en =  {    // FIXME: workaround
         "حوم"               : "hover",
 }
 
@@ -189,7 +189,7 @@ const CSS_str_en = (id) => { // FIXME: workround
     }
 }
 
-export default function write_ar_html(el, page, jsGen) {
+function write_ar_html(el, page, jsGen) {
     const stack = []
     switch (el.id) {
         case 'call':
@@ -380,6 +380,7 @@ function write_ar_css_keyframes(attrs, children, page) {
 
 
 export {
+    write_ar_html,
     HTML_attr_en,
     CSS_value_en,
     CSS_str_en

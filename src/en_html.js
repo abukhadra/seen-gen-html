@@ -1,14 +1,12 @@
-import {
-    maybe_hyphenated,
-    BOOL_ATTRS,
-} from './html.js'
+import { maybe_hyphenated } from './html.js'
+import {BOOL_ATTRS} from './constants.js'
 import  { 
     is_list,
     to_str,
     panic,
 }  from '../lib/sutils.js'
 
-export default function write_html(el, page, jsGen) {
+function write_html(el, page, jsGen) {
     const stack = []
     switch(el.id) {
         case 'call' :  
@@ -182,3 +180,5 @@ function write_css_keyframes(attrs, children ,page) {
     page += '}'
     return page
 }
+
+export {write_html}

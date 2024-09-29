@@ -1,1 +1,1 @@
-export { default as HTMLGen} from './html.js'
+export {HTMLGen} from './html.js'
