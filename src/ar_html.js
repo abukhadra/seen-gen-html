@@ -193,7 +193,7 @@ class ArHtmlWriter {
     jsGen 
 
     constructor() { this.jsGen = jsGen }
-    function write_ar_html(el, page) {
+    write_ar_html(el, page) {
         const stack = []
         switch (el.id) {
             case 'call':
@@ -248,7 +248,7 @@ class ArHtmlWriter {
         return page
     }
 
-    function write_ar_css(attrs, page) {
+    write_ar_css(attrs, page) {
         attrs.forEach(attr => {
             const k = maybe_hyphenated(CSS_key_en(attr.v[0].v[1]))
             const v = attr.v[1]
@@ -264,7 +264,7 @@ class ArHtmlWriter {
         return page
     }
 
-    function write_ar_css_selector(v, page) {
+    write_ar_css_selector(v, page) {
         const translate = (path) => {
             const get_regexp = (k) => RegExp(`(?<![p{L}\\p{N}_])${k}(?![\\p{L}\\p{N}_])`, 'ug')
             Object.keys(HTML_tag_en).forEach(k => {
@@ -290,7 +290,7 @@ class ArHtmlWriter {
         return page
     }
 
-    function write_ar_css_attr_value(v, page) {
+    write_ar_css_attr_value(v, page) {
         switch (v.id) {
             case 'bool':
                     panic() // FIXME
@@ -336,14 +336,14 @@ class ArHtmlWriter {
         return page
     }
 
-    function write_ar_css_fontface(attrs, page) {
+    write_ar_css_fontface(attrs, page) {
         page += `@font-face { `    
         page = write_ar_css(attrs,page)
         page += '}'
         return page
     }
 
-    function write_ar_css_keyframes(attrs, children, page) {
+    write_ar_css_keyframes(attrs, children, page) {
         // FIXME we are not covering all the cases: 
         // attrs[0] is only for keyframes('id'), what if user passes keyframes(id: 'id')
         page += ` @keyframes ${attrs[0].v.v[1]} { `

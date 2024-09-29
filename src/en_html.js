@@ -10,7 +10,7 @@ class HtmlWriter {
     jsGen
 
     constructor(jsGen) { this.jsGen = jsGen }
-    function write_html(el, page) {
+    write_html(el, page) {
         const stack = []
         switch(el.id) {
             case 'call' :  
@@ -63,7 +63,7 @@ class HtmlWriter {
         return page
     }
 
-    function write_css(attrs, page) {
+    write_css(attrs, page) {
         attrs.forEach( attr => { 
             const k = maybe_hyphenated(attr.v[0].v[1])
             const v = attr.v[1]
@@ -79,7 +79,7 @@ class HtmlWriter {
         return page
     }
 
-    function write_css_selector(v, page) {
+    write_css_selector(v, page) {
         if(is_list(v.v)) { 
             page += ' '
             v.v.forEach( (x, i) => {
@@ -92,7 +92,7 @@ class HtmlWriter {
         return page
     }
 
-    function write_css_attr_value(v , page) {
+    write_css_attr_value(v , page) {
         switch(v.id) {
             case 'int': 
             case 'float' : 
@@ -138,7 +138,7 @@ class HtmlWriter {
         return page
     }
 
-    function write_css_fontface(attrs, page) {
+    write_css_fontface(attrs, page) {
         page += `@font-face { `    
         page = write_ar_css(attrs,page)
         page += '}'
@@ -146,7 +146,7 @@ class HtmlWriter {
     }
 
 
-    function write_css_keyframes(attrs, children ,page) {
+    write_css_keyframes(attrs, children ,page) {
         // FIXME we are not covering all the cases: 
             // attrs[0] is only for keyframes('id'), what if user passes keyframes(id: 'id')
         page += ` @keyframes ${attrs[0].v.v[1]} { `  
