@@ -195,6 +195,7 @@ class ArHtmlWriter {
     init(jsGen) { 
         jsGen.init()
         this.jsGen = jsGen 
+        console.log(this.jsGen)
         return this
     }
 
