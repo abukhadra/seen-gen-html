@@ -1,4 +1,4 @@
-import { maybe_hyphenated } from './html.js'
+import { maybe_hyphenated } from './main.js'
 import {    
     BOOL_ATTRS,
     ELEMENTS_WITH_DIR,
