@@ -12,6 +12,7 @@ class HtmlWriter {
     constructor(jsGen) { 
         this.jsGen = jsGen 
         this.jsGen.init()
+        return this
     }
     write_html(el, page) {
         const stack = []

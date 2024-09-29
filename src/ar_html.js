@@ -195,6 +195,7 @@ class ArHtmlWriter {
     constructor(jsGen) { 
         this.jsGen = jsGen 
         this.jsGen.init()
+        return this
     }
     write_ar_html(el, page) {
         const stack = []
