@@ -189,198 +189,202 @@ const CSS_str_en = (id) => { // FIXME: workround
     }
 }
 
-function write_ar_html(el, page, jsGen) {
-    const stack = []
-    switch (el.id) {
-        case 'call':
-            const id = el.v[0].v.v[1]
-            const tag = HTML_tag_en[id] || id
-            const attrs = el.v[1] || []
-            const children = el.v[2] || []
-            if(tag === 'br') { return page += '<br>' }
-            switch (tag) {
-                case 'اختر': page = write_ar_css(attrs, page) + '} '; break
-                case 'عرف_خط': page = write_ar_css_fontface(attrs, page); break
-                case 'اطارات_رئيسية': page = write_ar_css_keyframes(attrs, children, page); break
-                default:
-                    stack.push(tag)
-                    page += `<${tag}`
+class ArHtmlWriter {
+    jsGen 
 
-                    if( ELEMENTS_WITH_DIR.includes(tag)) { page += ` dir='rtl'` } 
-                    attrs.forEach((attr, i) => {
-                        if (i === 0 && attr.id === 'str') {
-                            page += ` id='${attr.v.v[1]}'`
-                        } else if (attr.id === 'named_arg') {
-                            const attr_name = HTML_attr_en(attr.v[0].v[1])
-                            if(BOOL_ATTRS.includes(attr_name)) {
-                                page += ` ${attr_name} `    
+    constructor() { this.jsGen = jsGen }
+    function write_ar_html(el, page) {
+        const stack = []
+        switch (el.id) {
+            case 'call':
+                const id = el.v[0].v.v[1]
+                const tag = HTML_tag_en[id] || id
+                const attrs = el.v[1] || []
+                const children = el.v[2] || []
+                if(tag === 'br') { return page += '<br>' }
+                switch (tag) {
+                    case 'اختر': page = write_ar_css(attrs, page) + '} '; break
+                    case 'عرف_خط': page = write_ar_css_fontface(attrs, page); break
+                    case 'اطارات_رئيسية': page = write_ar_css_keyframes(attrs, children, page); break
+                    default:
+                        stack.push(tag)
+                        page += `<${tag}`
+
+                        if( ELEMENTS_WITH_DIR.includes(tag)) { page += ` dir='rtl'` } 
+                        attrs.forEach((attr, i) => {
+                            if (i === 0 && attr.id === 'str') {
+                                page += ` id='${attr.v.v[1]}'`
+                            } else if (attr.id === 'named_arg') {
+                                const attr_name = HTML_attr_en(attr.v[0].v[1])
+                                if(BOOL_ATTRS.includes(attr_name)) {
+                                    page += ` ${attr_name} `    
+                                } else {
+                                    page += ` ${attr_name}= `
+                                    if (attr.v[1].id === 'str') {
+                                        page += `'${attr.v[1].v.v[1]}'`
+                                    } else if (attr.v[1].id === 'int' || attr.v[1].id === 'float') {
+                                        const num = to_maghrib_num(attr.v[1].v[0].v[1])
+                                        const suffix = attr.v[1].v[1]? CSS_suffix_en(attr.v[1].v[1].v[1]) || '' : ''
+                                        page += `${num}${suffix}`
+                                    } else if (attr.v[1].id === 'bool') {
+                                        page += `${HTML_attr_en(attr_name)}`
+
+                                    }else { panic('not supported: ' + to_str(attr)) }
+                                }
+
                             } else {
-                                page += ` ${attr_name}= `
-                                if (attr.v[1].id === 'str') {
-                                    page += `'${attr.v[1].v.v[1]}'`
-                                } else if (attr.v[1].id === 'int' || attr.v[1].id === 'float') {
-                                    const num = to_maghrib_num(attr.v[1].v[0].v[1])
-                                    const suffix = attr.v[1].v[1]? CSS_suffix_en(attr.v[1].v[1].v[1]) || '' : ''
-                                    page += `${num}${suffix}`
-                                } else if (attr.v[1].id === 'bool') {
-                                    page += `${HTML_attr_en(attr_name)}`
-
-                                }else { panic('not supported: ' + to_str(attr)) }
+                                panic('not supported: ' + to_str(attr))
                             }
-
-                        } else {
-                            panic('not supported: ' + to_str(attr))
-                        }
-                    })
-                    page += '>'
-                    children.forEach(c => { page = write_ar_html(c, page) })
-                    stack.pop()
-                    page += `</${tag}>`
-            }
-            break
-        case 'str': page += el.v.v[1]; break
-        default: panic('unknown html element: ' + to_str(el))
-    }
-    return page
-}
-
-function write_ar_css(attrs, page) {
-    attrs.forEach(attr => {
-        const k = maybe_hyphenated(CSS_key_en(attr.v[0].v[1]))
-        const v = attr.v[1]
-        if (k === 'element') {
-            page = write_ar_css_selector(v, page)
-            page += ' {'
-        } else {
-            page += `${k} : `
-            page = write_ar_css_attr_value(v, page)
-            page += `; `
+                        })
+                        page += '>'
+                        children.forEach(c => { page = write_ar_html(c, page) })
+                        stack.pop()
+                        page += `</${tag}>`
+                }
+                break
+            case 'str': page += el.v.v[1]; break
+            default: panic('unknown html element: ' + to_str(el))
         }
-    })
-    return page
-}
-
-function write_ar_css_selector(v, page) {
-    const translate = (path) => {
-        const get_regexp = (k) => RegExp(`(?<![p{L}\\p{N}_])${k}(?![\\p{L}\\p{N}_])`, 'ug')
-        Object.keys(HTML_tag_en).forEach(k => {
-            path = path.replaceAll(get_regexp(k), HTML_tag_en[k])
-        })
-        Object.keys(CSS_pseudo_en).forEach(k => {
-            path = path.replaceAll(get_regexp(k), CSS_pseudo_en[k])
-        })
-        return path
+        return page
     }
 
-    if (is_list(v.v)) {
-        page += ' '
-        v.v.forEach((selector, i) => {
-            let path = selector.v.v[1]            
-            page += translate(path)
-            if (i < v.v.length - 1) { page += ',' }
-        })
-    } else {
-        const path = v.v.v[1]
-        page += translate(path)
-    }
-    return page
-}
-
-function write_ar_css_attr_value(v, page) {
-    switch (v.id) {
-        case 'bool':
-                panic() // FIXME
-            break;
-        case 'int':
-        case 'float':
-            const num = to_maghrib_num(v.v[0].v[1])
-            const suffix = CSS_suffix_en(v.v[1] && v.v[1].v[1]) || ''
-            page += num + suffix
-            break
-        case 'prefix':
-            page += v.v.op.v
-            page = write_ar_css_attr_value(v.v.opr, page)
-            break
-        case 'postfix':
-            page = write_ar_css_attr_value(v.v.opr, page)
-            page += v.v.op.v
-            break
-        case 'str': page += CSS_str_en(v.v.v[1]); break;
-        case 'ref': page += maybe_hyphenated(CSS_value_en(v.v.v[1])); break;
-        case 'tuple':   // FIXME: this depends on order, some things require order in css and others do not
-            v.v.forEach(el => {
-                page = write_ar_css_attr_value(el, page + ' ')
-            })
-            break;
-        case 'call':
-            const ref = CSS_fn_en(v.v[0].v.v[1])
-            const args = v.v[1]
-            page += ` ${ref}(`
-            args.forEach(arg => {
-                page = write_ar_css_attr_value(arg, page)
-            })
-            page += `)`
-            break
-        case 'bin': 
-            jsGen.init()
-            jsGen.write_expr(v)
-            const code = jsGen.get_code()
-            page += '${' + code + '}'.trim() 
-            break
-        default: panic(`not supported: html generations:  ${to_str(v)}`)
-    }
-    return page
-}
-
-function write_ar_css_fontface(attrs, page) {
-    page += `@font-face { `    
-    page = write_ar_css(attrs,page)
-    page += '}'
-    return page
-}
-
-function write_ar_css_keyframes(attrs, children, page) {
-    // FIXME we are not covering all the cases: 
-    // attrs[0] is only for keyframes('id'), what if user passes keyframes(id: 'id')
-    page += ` @keyframes ${attrs[0].v.v[1]} { `
-    children && children.forEach(c => {
-        const ref = c.v[0].v.v[1]
-        const v = CSS_value_en(c.v[1])
-        switch (ref) {
-            case 'عند':
-                const percentage = v[0]
-                const attrs = v[1].v || []
-                page = write_ar_css_attr_value(percentage, page)
+    function write_ar_css(attrs, page) {
+        attrs.forEach(attr => {
+            const k = maybe_hyphenated(CSS_key_en(attr.v[0].v[1]))
+            const v = attr.v[1]
+            if (k === 'element') {
+                page = write_ar_css_selector(v, page)
                 page += ' {'
-                attrs.forEach(attr => {
-                    if (attr.id === 'named_tuple') {
-                        attr.v.forEach(el => {
-                            const _k = maybe_hyphenated(CSS_key_en(el[0].v[1]))
-                            const _v = CSS_value_en(el[1])
+            } else {
+                page += `${k} : `
+                page = write_ar_css_attr_value(v, page)
+                page += `; `
+            }
+        })
+        return page
+    }
+
+    function write_ar_css_selector(v, page) {
+        const translate = (path) => {
+            const get_regexp = (k) => RegExp(`(?<![p{L}\\p{N}_])${k}(?![\\p{L}\\p{N}_])`, 'ug')
+            Object.keys(HTML_tag_en).forEach(k => {
+                path = path.replaceAll(get_regexp(k), HTML_tag_en[k])
+            })
+            Object.keys(CSS_pseudo_en).forEach(k => {
+                path = path.replaceAll(get_regexp(k), CSS_pseudo_en[k])
+            })
+            return path
+        }
+
+        if (is_list(v.v)) {
+            page += ' '
+            v.v.forEach((selector, i) => {
+                let path = selector.v.v[1]            
+                page += translate(path)
+                if (i < v.v.length - 1) { page += ',' }
+            })
+        } else {
+            const path = v.v.v[1]
+            page += translate(path)
+        }
+        return page
+    }
+
+    function write_ar_css_attr_value(v, page) {
+        switch (v.id) {
+            case 'bool':
+                    panic() // FIXME
+                break;
+            case 'int':
+            case 'float':
+                const num = to_maghrib_num(v.v[0].v[1])
+                const suffix = CSS_suffix_en(v.v[1] && v.v[1].v[1]) || ''
+                page += num + suffix
+                break
+            case 'prefix':
+                page += v.v.op.v
+                page = write_ar_css_attr_value(v.v.opr, page)
+                break
+            case 'postfix':
+                page = write_ar_css_attr_value(v.v.opr, page)
+                page += v.v.op.v
+                break
+            case 'str': page += CSS_str_en(v.v.v[1]); break;
+            case 'ref': page += maybe_hyphenated(CSS_value_en(v.v.v[1])); break;
+            case 'tuple':   // FIXME: this depends on order, some things require order in css and others do not
+                v.v.forEach(el => {
+                    page = write_ar_css_attr_value(el, page + ' ')
+                })
+                break;
+            case 'call':
+                const ref = CSS_fn_en(v.v[0].v.v[1])
+                const args = v.v[1]
+                page += ` ${ref}(`
+                args.forEach(arg => {
+                    page = write_ar_css_attr_value(arg, page)
+                })
+                page += `)`
+                break
+            case 'bin': 
+                jsGen.init()
+                jsGen.write_expr(v)
+                const code = jsGen.get_code()
+                page += '${' + code + '}'.trim() 
+                break
+            default: panic(`not supported: html generations:  ${to_str(v)}`)
+        }
+        return page
+    }
+
+    function write_ar_css_fontface(attrs, page) {
+        page += `@font-face { `    
+        page = write_ar_css(attrs,page)
+        page += '}'
+        return page
+    }
+
+    function write_ar_css_keyframes(attrs, children, page) {
+        // FIXME we are not covering all the cases: 
+        // attrs[0] is only for keyframes('id'), what if user passes keyframes(id: 'id')
+        page += ` @keyframes ${attrs[0].v.v[1]} { `
+        children && children.forEach(c => {
+            const ref = c.v[0].v.v[1]
+            const v = CSS_value_en(c.v[1])
+            switch (ref) {
+                case 'عند':
+                    const percentage = v[0]
+                    const attrs = v[1].v || []
+                    page = write_ar_css_attr_value(percentage, page)
+                    page += ' {'
+                    attrs.forEach(attr => {
+                        if (attr.id === 'named_tuple') {
+                            attr.v.forEach(el => {
+                                const _k = maybe_hyphenated(CSS_key_en(el[0].v[1]))
+                                const _v = CSS_value_en(el[1])
+                                page += ` ${_k} : `
+                                page = write_ar_css_attr_value(_v, page)
+                                page += `; `
+                            })
+                        } else {
+                            const _k = maybe_hyphenated(CSS_key_en(attr[0].v[1]))
+                            const _v = CSS_value_en(attr[1])
                             page += ` ${_k} : `
                             page = write_ar_css_attr_value(_v, page)
-                            page += `; `
-                        })
-                    } else {
-                        const _k = maybe_hyphenated(CSS_key_en(attr[0].v[1]))
-                        const _v = CSS_value_en(attr[1])
-                        page += ` ${_k} : `
-                        page = write_ar_css_attr_value(_v, page)
-                        page += `; `    
-                    }
-                })
-                page += '} '
-                break
-            default: panic('unsupported element: ' + to_str(ref))
-        }
-    })
-    page += '}'
-    return page
+                            page += `; `    
+                        }
+                    })
+                    page += '} '
+                    break
+                default: panic('unsupported element: ' + to_str(ref))
+            }
+        })
+        page += '}'
+        return page
+    }
 }
 
-
 export {
-    write_ar_html,
+    ArHtmlWriter,
     HTML_attr_en,
     CSS_value_en,
     CSS_str_en
