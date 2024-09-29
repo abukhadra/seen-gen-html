@@ -8,10 +8,17 @@ import {
 
 class HTMLGen {
 
-    write_html = write_html
-    write_ar_html = write_ar_html
-    CSS_value_en = CSS_value_en
-    CSS_str_en = CSS_str_en
+    write_html
+    write_ar_html
+    CSS_value_en 
+    CSS_str_en
+
+    constructor() {
+        this.write_html = write_html
+        this.write_ar_html = write_ar_html
+        this.CSS_value_en = CSS_value_en
+        this.CSS_str_en = CSS_str_en    
+    }
 
     HYPHENATED = [
         "min_width",

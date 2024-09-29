@@ -1,5 +1,3 @@
-import {JSGen} from 'seen-gen-js/src/main.js'
-
 import {
     maybe_hyphenated,
     BOOL_ATTRS,
@@ -191,7 +189,7 @@ const CSS_str_en = (id) => { // FIXME: workround
     }
 }
 
-export default function write_ar_html(el, page) {
+export default function write_ar_html(el, page, jsGen) {
     const stack = []
     switch (el.id) {
         case 'call':
@@ -324,11 +322,9 @@ function write_ar_css_attr_value(v, page) {
             page += `)`
             break
         case 'bin': 
-            const gen = new JSGen()
-            // gen.init([v])
-            gen.init()
-            gen.write_expr(v)
-            const code = gen.get_code()
+            jsGen.init()
+            jsGen.write_expr(v)
+            const code = jsGen.get_code()
             page += '${' + code + '}'.trim() 
             break
         default: panic(`not supported: html generations:  ${to_str(v)}`)

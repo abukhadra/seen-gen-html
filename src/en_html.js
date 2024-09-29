@@ -8,7 +8,7 @@ import  {
     panic,
 }  from '../lib/sutils.js'
 
-export default function write_html(el, page) {
+export default function write_html(el, page, jsGen) {
     const stack = []
     switch(el.id) {
         case 'call' :  
