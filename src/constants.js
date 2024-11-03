@@ -62,13 +62,13 @@ const BOOL_ATTRS = [
 ]
 
 const ELEMENTS_WITH_DIR = [
-    "html",
-    "body",
-    "div",
-    "span",
-    "p",
-    "textarea",
-    "field",
+    "Html",
+    "Body",
+    "Div",
+    "Span",
+    "P",
+    "Textarea",
+    "Field",
 ]
 
 export {
