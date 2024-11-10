@@ -15,6 +15,19 @@ class HtmlWriter {
         return this
     }
     write_html(el, page) {
+    }
+}
+
+
+/* class HtmlWriter {
+    jsGen
+
+    constructor(jsGen) {
+        jsGen.init()
+        this.jsGen = jsGen
+        return this
+    }
+    write_html(el, page) {
         const stack = []
         switch(el.id) {
             case 'call' :  
@@ -184,5 +197,5 @@ class HtmlWriter {
         page += '}'
         return page
     }
-}
+} */
 export {HtmlWriter}

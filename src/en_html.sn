@@ -1,0 +1,16 @@
+struct Html { [] } 
+struct Head { [] }
+struct Body { [] }
+
+struct Style { [] }
+struct Select {
+    paths: [str]
+}
+
+@(select: Select) {
+    fn el(id) { select.paths(id) }
+    fn el("body')
+    .and_el('html')
+    .margin(0)
+    .padding(0)
+}
